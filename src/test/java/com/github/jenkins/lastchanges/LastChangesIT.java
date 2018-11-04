@@ -77,7 +77,7 @@ public class LastChangesIT {
                 Collections.<GitSCMExtension>singletonList(new DisableRemotePoll()));
         FreeStyleProject project = jenkins.createFreeStyleProject("git-test");
         project.setScm(scm);
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null);
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null,false);
         project.getPublishersList().add(publisher);
         project.save();
 
@@ -183,7 +183,7 @@ public class LastChangesIT {
                 Collections.<GitSCMExtension>singletonList(new DisableRemotePoll()));
         FreeStyleProject project = jenkins.createFreeStyleProject("git-test");
         project.setScm(scm);
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,"git-sample-repo", null);
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,"git-sample-repo", null,false);
         project.getPublishersList().add(publisher);
         project.save();
 
@@ -249,7 +249,7 @@ public class LastChangesIT {
                 Collections.<GitSCMExtension>singletonList(new DisableRemotePoll()));
         FreeStyleProject project = jenkins.createFreeStyleProject("git-test");
         project.setScm(scm);
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.LAST_SUCCESSFUL_BUILD, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null);
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.LAST_SUCCESSFUL_BUILD, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null,false);
         project.getPublishersList().add(publisher);
         project.save();
 
@@ -313,7 +313,7 @@ public class LastChangesIT {
                 Collections.<GitSCMExtension>singletonList(new DisableRemotePoll()));
         FreeStyleProject project = jenkins.createFreeStyleProject("git-test");
         project.setScm(scm);
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null);
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null,false);
         project.getPublishersList().add(publisher);
         project.save();
 
@@ -321,7 +321,7 @@ public class LastChangesIT {
         FreeStyleBuild build = jenkins.buildAndAssertSuccess(project);
 
 
-        publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, build.getNumber()+"");
+        publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, build.getNumber()+"",false);
 
         build = jenkins.buildAndAssertSuccess(project);
 
@@ -383,7 +383,7 @@ public class LastChangesIT {
                 Collections.<GitSCMExtension>singletonList(new DisableRemotePoll()));
         FreeStyleProject project = jenkins.createFreeStyleProject("git-test");
         project.setScm(scm);
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, "99");
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, "99",false);
         project.getPublishersList().add(publisher);
         project.save();
 
@@ -415,7 +415,7 @@ public class LastChangesIT {
         FreeStyleProject project = jenkins.createFreeStyleProject("git-test-slave");
         project.setAssignedNode(slave);
         project.setScm(scm);
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.SIDE,MatchingType.WORD, true, false, null,null,null,null, null);
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION, FormatType.SIDE,MatchingType.WORD, true, false, null,null,null,null, null,false);
         project.getPublishersList().add(publisher);
         project.save();
 
@@ -476,7 +476,7 @@ public class LastChangesIT {
         SvnSCM scm = new SvnSCM(".svn",sampleRepoDir,locations);//directory content is irrelevant cause LastChangesPublisher will look only into dir name (in case of svn)
         FreeStyleProject project = jenkins.createFreeStyleProject("svn-test");
         project.setScm(scm);
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION,FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null);
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION,FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null,false);
         project.getPublishersList().add(publisher);
         project.save();
         
@@ -495,7 +495,7 @@ public class LastChangesIT {
     @Test
     public void shouldNotGetLastChangesOfNonExistingRepository() throws Exception {
         FreeStyleProject project = jenkins.createFreeStyleProject("non-existing-test");
-        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION,FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null);
+        LastChangesPublisher publisher = new LastChangesPublisher(SinceType.PREVIOUS_REVISION,FormatType.LINE,MatchingType.NONE, true, false, "0.50","1500",null,null, null,false);
         project.getPublishersList().add(publisher);
         project.save();
 

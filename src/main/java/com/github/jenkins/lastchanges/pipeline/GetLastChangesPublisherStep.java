@@ -7,7 +7,9 @@ import com.github.jenkins.lastchanges.model.MatchingType;
 import com.github.jenkins.lastchanges.model.SinceType;
 import com.google.inject.Inject;
 import hudson.Extension;
-import org.jenkinsci.plugins.workflow.steps.*;
+import org.jenkinsci.plugins.workflow.steps.AbstractStepDescriptorImpl;
+import org.jenkinsci.plugins.workflow.steps.AbstractStepImpl;
+import org.jenkinsci.plugins.workflow.steps.AbstractSynchronousStepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 
@@ -23,6 +25,7 @@ public class GetLastChangesPublisherStep extends AbstractStepImpl {
     private String specificRevision;
     private String vcsDir;
     private String specificBuild;
+    private boolean cleanVcsDir;
 
     @DataBoundConstructor
     public GetLastChangesPublisherStep(SinceType since,
@@ -34,7 +37,8 @@ public class GetLastChangesPublisherStep extends AbstractStepImpl {
                                        String matchingMaxComparisons,
                                        String specificRevision,
                                        String vcsDir,
-                                       String specificBuild) {
+                                       String specificBuild,
+                                       boolean cleanVcsDir) {
         this.since = since;
         this.format = format;
         this.matching = matching;
@@ -45,6 +49,7 @@ public class GetLastChangesPublisherStep extends AbstractStepImpl {
         this.specificRevision = specificRevision;
         this.vcsDir = vcsDir;
         this.specificBuild = specificBuild;
+        this.cleanVcsDir=cleanVcsDir;
     }
 
     public static class Execution extends AbstractSynchronousStepExecution<LastChangesPublisherScript> {
@@ -65,7 +70,8 @@ public class GetLastChangesPublisherStep extends AbstractStepImpl {
                     step.matchingMaxComparisons,
                     step.specificRevision,
                     step.vcsDir,
-                    step.specificBuild);
+                    step.specificBuild,
+                    step.cleanVcsDir);
 
             return new LastChangesPublisherScript(publisher);
         }

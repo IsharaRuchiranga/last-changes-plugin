@@ -57,6 +57,8 @@ import org.tmatesoft.svn.core.wc.SVNRevision;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -65,8 +67,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.github.jenkins.lastchanges.impl.GitLastChanges.repository;
-import java.io.Serializable;
-import java.nio.file.Files;
 
 /**
  * @author rmpestano
@@ -113,9 +113,11 @@ public class LastChangesPublisher extends Recorder implements SimpleBuildStep, S
 
     private transient FilePath vcsDirFound = null; //location of vcs directory (.git or .svn) in job workspace (is here for caching purposes)
 
+    private boolean cleanVcsDir=false;
+
     @DataBoundConstructor
     public LastChangesPublisher(SinceType since, FormatType format, MatchingType matching, Boolean showFiles, Boolean synchronisedScroll, String matchWordsThreshold,
-            String matchingMaxComparisons, String specificRevision, String vcsDir, String specificBuild) {
+            String matchingMaxComparisons, String specificRevision, String vcsDir, String specificBuild, boolean cleanVcsDir) {
         this.specificRevision = specificRevision;
         this.format = format;
         this.since = since;
@@ -126,6 +128,7 @@ public class LastChangesPublisher extends Recorder implements SimpleBuildStep, S
         this.matchingMaxComparisons = matchingMaxComparisons;
         this.vcsDir = vcsDir;
         this.specificBuild = specificBuild;
+        this.cleanVcsDir=cleanVcsDir;
     }
 
     @Override
@@ -287,7 +290,14 @@ public class LastChangesPublisher extends Recorder implements SimpleBuildStep, S
             LOG.log(Level.SEVERE, "Could not publish LastChanges.", e);
         } finally {
             if (vcsTargetDir != null && vcsTargetDir.exists()) {
-                vcsTargetDir.deleteRecursive();//delete copied dir on master
+//                try{
+//                    vcsTargetDir.deleteRecursive();//delete copied dir on master
+//                }catch (Exception e){
+//                    LOG.log(Level.WARNING, "Failed to delete vcdTargetDir "+vcsDir,e);
+//                }
+                if(cleanVcsDir){
+                    vcsTargetDir.deleteRecursive();//delete copied dir on master
+                }
             }
         }
         // always success (only warn when no diff was generated)
